@@ -6,7 +6,7 @@
 </head>
 <body>
     <div class="form">
-        <form action="https://lieselotte-pestersome-wenona.ngrok-free.dev/login" method="POST">
+        <form id="loginForm">
             <input type="text" name="username" placeholder="Enter Username" required>
             <input type="password" name="password" placeholder="Enter Password" required>
             <button type="submit">Log In</button>
@@ -14,29 +14,34 @@
         <p id="login">Don't have an account?</p>
         <a href="signin.html" id="login">Sign in here</a>
     </div>
+
     <script>
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const formData = new FormData(e.target);
-  const data = {
-    username: formData.get('username'),
-    password: formData.get('password')
-  };
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = {
+            username: formData.get('username'),
+            password: formData.get('password')
+        };
 
-  const res = await fetch('https://your-ngrok-url.ngrok-free.app/login', {
-    method: 'POST',
-    body: new URLSearchParams(data)
-  });
+        try {
+            const res = await fetch('https://lieselotte-pestersome-wenona.ngrok-free.dev/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(data)
+            });
 
-  const result = await res.json();
-  if (result.success) {
-    localStorage.setItem('username', result.username);
-    window.location.href = 'account.html';
-  } else {
-    alert(result.message);
-  }
-});
-</script>
+            const result = await res.json();
+            if (result.success) {
+                localStorage.setItem('username', result.username);
+                window.location.href = 'account.html';
+            } else {
+                alert(result.message || "Login failed.");
+            }
+        } catch (err) {
+            alert("Error connecting to server.");
+        }
+    });
+    </script>
 </body>
 </html>
-
