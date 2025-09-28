@@ -1,22 +1,47 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Yo-BUXX</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <script>
-        function do_something() {
-            alert("Something happened")
+<head>
+    <title>Yo-BUXX Sign In</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="form">
+        <form id="signinForm">
+            <input type="text" name="username" placeholder="Enter Username" required>
+            <input type="password" name="password" placeholder="Enter Password" required>
+            <button type="submit">Sign In</button>
+        </form>
+        <p id="login">Have an existing account?</p>
+        <a href="login.html" id="signin">Login here</a>  
+    </div>
+
+    <script>
+    document.getElementById('signinForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = {
+            username: formData.get('username'),
+            password: formData.get('password')
+        };
+
+        try {
+            const res = await fetch('https://lieselotte-pestersome-wenona.ngrok-free.dev/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(data)
+            });
+
+            const result = await res.json();
+            if (result.success) {
+                localStorage.setItem('username', result.username);
+                window.location.href = 'account.html';
+            } else {
+                alert("Sign-in failed.");
             }
-        </script>
-        <div class="form">
-            <form action="https://lieselotte-pestersome-wenona.ngrok-free.dev/register" method="POST">
-                <input type="text" name="username" placeholder="Enter Username">
-                <input type="password" name="password" placeholder="Enter Password">
-                <button type="submit">Log In</button>
-            </form>
-            <p id="login">Have an existing account?</p><a href="login.html"id="signin">Login here</a>  
-        </div>
-    </body>
+        } catch (err) {
+            alert("Error connecting to server.");
+        }
+    });
+    </script>
+</body>
 </html>
