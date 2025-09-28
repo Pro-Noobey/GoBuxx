@@ -1,29 +1,44 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Home</title>
-    </head>
-    <body>
-  <h1 id="welcome"></h1>
-  <p>Balance: ₹<span id="balance"></span></p>
+<head>
+    <title>Go Buxx Account</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard">
+        <h1 id="welcome">Welcome, ...</h1>
+        <p>Your current balance: ₹<span id="balance">0</span></p>
+    </div>
 
-  <script>
-    const username = localStorage.getItem('username');
-    if (!username) {
-      window.location.href = 'login.html';
-    }
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const username = localStorage.getItem('username');
+        if (!username || username === "undefined" || username === "null") {
+            console.warn("No username found in localStorage. Redirecting...");
+            window.location.href = 'login.html';
+            return;
+        }
 
-    fetch('https://your-ngrok-url.ngrok-free.app/get_account_data', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username })
-    })
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById('welcome').innerText = `Welcome, ${data.username}`;
-      document.getElementById('balance').innerText = data.balance;
+        fetch('https://lieselotte-pestersome-wenona.ngrok-free.dev/get_account_data', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.error) {
+                alert("Error loading account.");
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('welcome').innerText = `Welcome, ${data.username}`;
+                document.getElementById('balance').innerText = data.balance;
+            }
+        })
+        .catch(() => {
+            alert("Connection error.");
+            window.location.href = 'login.html';
+        });
     });
-  </script>
+    </script>
 </body>
-
 </html>
