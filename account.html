@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Home</title>
+    </head>
+    <body>
+  <h1 id="welcome"></h1>
+  <p>Balance: ₹<span id="balance"></span></p>
+
+  <script>
+    const username = localStorage.getItem('username');
+    if (!username) {
+      window.location.href = 'login.html';
+    }
+
+    fetch('https://your-ngrok-url.ngrok-free.app/get_account_data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username })
+    })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('welcome').innerText = `Welcome, ${data.username}`;
+      document.getElementById('balance').innerText = data.balance;
+    });
+  </script>
+</body>
+
+</html>
