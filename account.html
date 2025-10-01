@@ -82,7 +82,9 @@
                 const payOption = document.createElement('button');
                 payOption.textContent = 'Pay';
                 payOption.onclick = () => {
-                    window.location.href = `wallet.html?to=${encodeURIComponent(user.username)}`;
+                    window.location.href = 'wallet.html';
+                };
+
                 };
                 menu.appendChild(payOption);
 
@@ -100,3 +102,4 @@
     </script>
 </body>
 </html>
+
