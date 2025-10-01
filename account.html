@@ -9,6 +9,16 @@
         <p>Your current balance: ♦<span id="balance">0</span></p>
     </div>
     <h1 id="welcome">Welcome, ...</h1>
+    <p id="citzenstxt">Citzens</p>
+    <p><span id="citzens"></span></p>
+
+
+    <script>
+        fetch('https://lieselotte-pestersome-wenona.ngrok-free.dev/getusers'), {
+            method: 'POST'
+            body: JSON.stringify({file})
+        }
+    </script>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -42,5 +52,3 @@
     </script>
 </body>
 </html>
-
-
