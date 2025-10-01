@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Go Buxx Account</title>
+    <title>Go Buxx Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header class="main-header">
         <h1>Go Buxx Dashboard</h1>
+        <div class="user-menu">
+            <span id="username">daan</span>
+            <button class="menu-button" id="userMenuBtn">&#x22EE;</button>
+            <div class="context-menu" id="userContextMenu">
+                <button onclick="window.location.href='settings.html'">Settings</button>
+                <button onclick="window.location.href='wallet.html'">Wallet</button>
+            </div>
+        </div>
         <p>Your current balance: ♦<span id="balance">0</span></p>
     </header>
 
@@ -23,10 +31,15 @@
     document.addEventListener('DOMContentLoaded', () => {
         const username = localStorage.getItem('username');
         if (!username || username === "undefined" || username === "null") {
-            console.warn("No username found in localStorage. Redirecting...");
             window.location.href = 'login.html';
             return;
         }
+
+        document.getElementById('username').textContent = username;
+
+        document.getElementById('userMenuBtn').onclick = () => {
+            document.getElementById('userContextMenu').classList.toggle('visible');
+        };
 
         fetch('https://lieselotte-pestersome-wenona.ngrok-free.dev/get_account_data', {
             method: 'POST',
@@ -36,16 +49,11 @@
         .then(res => res.json())
         .then(data => {
             if (data.error) {
-                alert("Error loading account.");
                 window.location.href = 'login.html';
             } else {
                 document.getElementById('welcome').innerText = `Welcome, ${data.username}`;
                 document.getElementById('balance').innerText = data.balance;
             }
-        })
-        .catch(() => {
-            alert("Connection error.");
-            window.location.href = 'login.html';
         });
 
         fetch('https://lieselotte-pestersome-wenona.ngrok-free.dev/getusers', {
@@ -67,16 +75,14 @@
 
                 const menuButton = document.createElement('button');
                 menuButton.className = 'menu-button';
-                menuButton.innerHTML = '&#x22EE;'; // vertical ellipsis
+                menuButton.innerHTML = '&#x22EE;';
 
                 const menu = document.createElement('div');
                 menu.className = 'context-menu';
                 const payOption = document.createElement('button');
-                payOption.className = 'pay-button';
                 payOption.textContent = 'Pay';
                 payOption.onclick = () => {
-                    alert(`Paying ${user.username}...`);
-                    // You can replace this with actual payment logic
+                    window.location.href = `wallet.html?to=${encodeURIComponent(user.username)}`;
                 };
                 menu.appendChild(payOption);
 
@@ -89,9 +95,6 @@
                 card.appendChild(menu);
                 citizensList.appendChild(card);
             });
-        })
-        .catch(() => {
-            console.warn("Could not load citizens.");
         });
     });
     </script>
