@@ -10,15 +10,59 @@
     </div>
     <h1 id="welcome">Welcome, ...</h1>
     <p id="citzenstxt">Citzens</p>
-    <p><span id="citzens"></span></p>
+<p id="citizenstxt">Citizens</p>
+<ul id="citizens"></ul>
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Fetch and display account data
+    const username = localStorage.getItem('username');
+    if (!username || username === "undefined" || username === "null") {
+        console.warn("No username found in localStorage. Redirecting...");
+        window.location.href = 'login.html';
+        return;
+    }
 
-    <script>
-        fetch('https://lieselotte-pestersome-wenona.ngrok-free.dev/getusers'), {
-            method: 'POST'
-            body: JSON.stringify({file})
+    fetch('https://lieselotte-pestersome-wenona.ngrok-free.dev/get_account_data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.error) {
+            alert("Error loading account.");
+            window.location.href = 'login.html';
+        } else {
+            document.getElementById('welcome').innerText = `Welcome, ${data.username}`;
+            document.getElementById('balance').innerText = data.balance;
         }
-    </script>
+    })
+    .catch(() => {
+        alert("Connection error.");
+        window.location.href = 'login.html';
+    });
+
+    // Fetch and display citizens
+    fetch('https://lieselotte-pestersome-wenona.ngrok-free.dev/getusers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(res => res.json())
+    .then(users => {
+        const citizensList = document.getElementById('citizens');
+        citizensList.innerHTML = ''; // Clear existing list
+        Object.keys(users).forEach(user => {
+            const li = document.createElement('li');
+            li.textContent = user;
+            citizensList.appendChild(li);
+        });
+    })
+    .catch(() => {
+        console.warn("Could not load citizens.");
+    });
+});
+</script>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
