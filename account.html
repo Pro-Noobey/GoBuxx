@@ -52,11 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(users => {
         const citizensList = document.getElementById('citizens');
         citizensList.innerHTML = ''; // Clear existing list
-        Object.keys(users).forEach(user => {
-            const li = document.createElement('li');
-            li.textContent = user;
-            citizensList.appendChild(li);
-        });
+        users.forEach(user => {
+    const li = document.createElement('li');
+    li.textContent = user;
+    citizensList.appendChild(li);
+});
     })
     .catch(() => {
         console.warn("Could not load citizens.");
