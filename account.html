@@ -5,14 +5,19 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="header">
+    <header class="main-header">
+        <h1>Go Buxx Dashboard</h1>
         <p>Your current balance: ♦<span id="balance">0</span></p>
-    </div>
+    </header>
 
-    <h1 id="welcome">Welcome, ...</h1>
+    <section class="welcome-section">
+        <h2 id="welcome">Welcome, ...</h2>
+    </section>
 
-    <p id="citizenstxt">Citizens</p>
-    <ul id="citizens"></ul>
+    <section class="citizens-section">
+        <h3 id="citizenstxt">Citizens</h3>
+        <div id="citizens" class="citizen-grid"></div>
+    </section>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -23,7 +28,6 @@
             return;
         }
 
-        // Fetch account data
         fetch('https://lieselotte-pestersome-wenona.ngrok-free.dev/get_account_data', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -44,7 +48,6 @@
             window.location.href = 'login.html';
         });
 
-        // Fetch citizens list
         fetch('https://lieselotte-pestersome-wenona.ngrok-free.dev/getusers', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
@@ -52,12 +55,39 @@
         .then(res => res.json())
         .then(users => {
             const citizensList = document.getElementById('citizens');
-            citizensList.innerHTML = ''; // Clear existing list
+            citizensList.innerHTML = '';
 
             users.forEach(user => {
-                const li = document.createElement('li');
-                li.textContent = user.username;
-                citizensList.appendChild(li);
+                const card = document.createElement('div');
+                card.className = 'citizen-card';
+
+                const name = document.createElement('p');
+                name.className = 'citizen-name';
+                name.textContent = user.username;
+
+                const menuButton = document.createElement('button');
+                menuButton.className = 'menu-button';
+                menuButton.innerHTML = '&#x22EE;'; // vertical ellipsis
+
+                const menu = document.createElement('div');
+                menu.className = 'context-menu';
+                const payOption = document.createElement('button');
+                payOption.className = 'pay-button';
+                payOption.textContent = 'Pay';
+                payOption.onclick = () => {
+                    alert(`Paying ${user.username}...`);
+                    // You can replace this with actual payment logic
+                };
+                menu.appendChild(payOption);
+
+                menuButton.onclick = () => {
+                    menu.classList.toggle('visible');
+                };
+
+                card.appendChild(menuButton);
+                card.appendChild(name);
+                card.appendChild(menu);
+                citizensList.appendChild(card);
             });
         })
         .catch(() => {
