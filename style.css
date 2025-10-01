@@ -5,3 +5,139 @@
     font-size: 18px;
 
 }
+
+/* Reset & Base */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #0f1117;
+    color: #e0e0e0;
+}
+
+/* Header */
+.main-header {
+    background-color: #1a1d2b;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 2px solid #2a2f45;
+}
+
+.main-header h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #4da6ff;
+    text-shadow: 0 0 5px #4da6ff88;
+}
+
+.main-header p {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    color: #ffffffcc;
+}
+
+/* Welcome Section */
+.welcome-section {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.welcome-section h2 {
+    font-size: 1.8rem;
+    color: #ffffff;
+}
+
+/* Citizens Section */
+.citizens-section {
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.citizens-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #4da6ff;
+    text-shadow: 0 0 4px #4da6ff66;
+}
+
+/* Citizen Grid */
+.citizen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* Citizen Card */
+.citizen-card {
+    background-color: #1c1f2e;
+    border-radius: 12px;
+    padding: 15px;
+    position: relative;
+    box-shadow: inset 0 0 0 1px #2a2f45, 0 2px 8px #00000088;
+    transition: transform 0.2s ease;
+}
+
+.citizen-card:hover {
+    transform: translateY(-2px);
+}
+
+/* Citizen Name */
+.citizen-name {
+    font-size: 1.1rem;
+    margin: 0;
+    color: #ffffff;
+}
+
+/* Menu Button */
+.menu-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.menu-button:hover {
+    color: #4da6ff;
+}
+
+/* Context Menu */
+.context-menu {
+    display: none;
+    position: absolute;
+    top: 35px;
+    right: 10px;
+    background-color: #2a2f45;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px #00000088;
+    z-index: 10;
+    padding: 5px;
+}
+
+.context-menu.visible {
+    display: block;
+}
+
+/* Pay Button */
+.pay-button {
+    background-color: #4da6ff;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    box-shadow: 0 0 6px #4da6ff66;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pay-button:hover {
+    background-color: #3399ff;
+    box-shadow: 0 0 10px #4da6ffaa;
+}
+
+
