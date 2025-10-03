@@ -34,19 +34,19 @@ body {
     color: #ffffffcc;
 }
 
-/* User Info Top-Left */
+/* User Info Top-Left - FIXED FOR TOP-LEFT ALIGNMENT */
 .user-info {
-    position: absolute;
+    position: absolute; /* CHANGED back to absolute */
     top: 20px;
-    left: 20px;
+    left: 20px; /* CHANGED to align to the very left */
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
 #username {
-    font-size:3rem; /* Increased from 1.2rem */
-    font-weight: 700; /* Changed to 'bolder' or could use a numeric value like 700 */
+    font-size:3rem;
+    font-weight: 700;
     color: #ffffff;
     text-shadow: 0 0 4px #4da6ff88;
     margin: 20px
@@ -64,17 +64,25 @@ body {
     color: #4da6ff;
 }
 
-/* Context Menu */
+/* Context Menu - Adjusted to align to the right edge of its citizen-card parent */
 .context-menu {
     display: none;
     position: absolute;
     top: 45px;
-    left: 20px;
+    right: 10px; /* Aligns to the right edge of its parent (citizen-card) */
+    left: auto;
     background-color: #2a2f45;
     border-radius: 6px;
     box-shadow: 0 2px 6px #00000088;
     z-index: 10;
     padding: 5px;
+}
+
+/* Specific fix for the Header Context Menu */
+#userContextMenu {
+    /* Override for the user menu, which is inside .user-info */
+    top: 100%; /* Position it below the .user-info element */
+    left: 45px; /* ADJUSTED to align under the button more precisely */
 }
 
 .context-menu.visible {
