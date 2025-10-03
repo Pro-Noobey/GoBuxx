@@ -3,15 +3,27 @@
 <head>
     <title>Go Buxx Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+        // Immediately load the theme preference before the page fully renders
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        if (savedTheme === 'light') {
+            document.documentElement.classList.add('light-mode');
+        }
+    </script>
 </head>
-<body>
+<body class="dark-mode">
     <header class="main-header">
         <div class="user-info">
-            <span id="username">daan</span>
+            <svg id="AccountIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.93 0 3.5 1.57 3.5 3.5S13.93 12 12 12 8.5 10.43 8.5 8.5 10.07 5 12 5zm0 14.2c-2.61 0-5.69-1.39-7-2.64v-.2c.7-.6 1.45-1.12 2.25-1.52 1.05-.51 2.22-.84 3.5-.84s2.45.33 3.5.84c.8.4 1.55.92 2.25 1.52v.2c-1.31 1.25-4.39 2.64-7 2.64z"/>
+            </svg>
+            
+            <span id="username">...</span>
             <button class="menu-button" id="userMenuBtn">&#x22EE;</button>
             <div class="context-menu" id="userContextMenu">
                 <button onclick="window.location.href='settings.html'">Settings</button>
                 <button onclick="window.location.href='wallet.html'">Wallet</button>
+                <button onclick="localStorage.removeItem('username'); window.location.href='login.html'">Logout</button>
             </div>
         </div>
         <h1>Go Buxx Dashboard</h1>
@@ -24,11 +36,17 @@
 
     <section class="citizens-section">
         <h3 id="citizenstxt">Citizens</h3>
-        <div id="citizens" class="citizen-grid"></div>
+        <div id="citizens" class="citizen-grid">
+            </div>
     </section>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // 3. APPLYING THEME TO BODY IF JAVASCRIPT WAS TOO SLOW
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.classList.remove('dark-mode', 'light-mode');
+        document.body.classList.add(`${savedTheme}-mode`);
+
         const username = localStorage.getItem('username');
         if (!username || username === "undefined" || username === "null") {
             window.location.href = 'login.html';
@@ -37,10 +55,13 @@
 
         document.getElementById('username').textContent = username;
 
-        document.getElementById('userMenuBtn').onclick = () => {
+        // Toggle context menu
+        document.getElementById('userMenuBtn').onclick = (e) => {
+            e.stopPropagation();
             document.getElementById('userContextMenu').classList.toggle('visible');
         };
 
+        // Fetch account data
         fetch('https://lieselotte-pestersome-wenona.ngrok-free.dev/get_account_data', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -56,6 +77,7 @@
             }
         });
 
+        // Fetch citizens list and create cards
         fetch('https://lieselotte-pestersome-wenona.ngrok-free.dev/getusers', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
@@ -66,6 +88,8 @@
             citizensList.innerHTML = '';
 
             users.forEach(user => {
+                if (user.username === username) return;
+
                 const card = document.createElement('div');
                 card.className = 'citizen-card';
 
@@ -89,16 +113,29 @@
                 };
                 menu.appendChild(payOption);
 
-                menuButton.onclick = () => {
+                menuButton.onclick = (e) => {
+                    e.stopPropagation();
+                    document.querySelectorAll('.context-menu.visible').forEach(m => {
+                        if (m !== menu) m.classList.remove('visible');
+                    });
                     menu.classList.toggle('visible');
                 };
-
+                
                 header.appendChild(name);
                 header.appendChild(menuButton);
                 card.appendChild(header);
                 card.appendChild(menu);
                 citizensList.appendChild(card);
             });
+        });
+        
+        // Global click listener to close menus
+        document.addEventListener('click', (e) => {
+             if (!e.target.closest('.menu-button')) {
+                document.querySelectorAll('.context-menu.visible').forEach(m => {
+                    m.classList.remove('visible');
+                });
+             }
         });
     });
     </script>
