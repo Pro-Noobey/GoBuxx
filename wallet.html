@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Go Buxx Wallet</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        if (savedTheme === 'light') {
+            document.documentElement.classList.add('light-mode');
+        }
+    </script>
+</head>
+<body class="dark-mode">
+    <header class="main-header">
+        <div class="user-info">
+            <a href="account.html" class="menu-link">&#x2190; Back</a>
+        </div>
+        <h1>Wallet</h1>
+        <p>Your current balance: ♦<span id="balance">...</span></p>
+    </header>
+
+    <section class="form-section" id="send-money-section">
+        <h2>Send Money</h2>
+        <form id="transferForm" class="form">
+            <input type="text" id="recipient" placeholder="Recipient Username" required>
+            <input type="number" id="amount" placeholder="Amount (♦)" min="1" required>
+            <button type="submit">Send Funds</button>
+            <p id="message" style="color: var(--accent-color); margin-top: 15px;"></p>
+        </form>
+    </section>
+    
+    <section class="history-section">
+        <h2>Transaction History</h2>
+        
+        <div class="transaction-list">
+            <div class="transaction-item sent">
+                <span class="sender">daan</span>
+                <span class="arrow">⟶</span>
+                <span class="amount">♦100</span>
+                <span class="arrow">⟶</span>
+                <span class="recipient">daan's alt</span>
+            </div>
+            
+            <div class="transaction-item received">
+                <span class="sender">someUser</span>
+                <span class="arrow">⟶</span>
+                <span class="amount">♦50</span>
+                <span class="arrow">⟶</span>
+                <span class="recipient">daan</span>
+            </div>
+            
+            <div class="transaction-item sent">
+                <span class="sender">daan</span>
+                <span class="arrow">⟶</span>
+                <span class="amount">♦25</span>
+                <span class="arrow">⟶</span>
+                <span class="recipient">friendUser</span>
+            </div>
+        </div>
+        
+    </section>
+
+    <script>
+    const API_URL = 'https://lieselotte-pestersome-wenona.ngrok-free.dev';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Apply theme for the body
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.classList.remove('dark-mode', 'light-mode');
+        document.body.classList.add(`${savedTheme}-mode`);
+        
+        const username = localStorage.getItem('username');
+        
+        // AUTHENTICATION CHECK
+        if (!username || username === "undefined" || username === "null") {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        const balanceSpan = document.getElementById('balance');
+        const form = document.getElementById('transferForm');
+        const message = document.getElementById('message');
+
+        // Function to update the balance
+        const updateBalance = async () => {
+            try {
+                const res = await fetch(`${API_URL}/get_account_data`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username })
+                });
+                const data = await res.json();
+                if (!data.error) {
+                    balanceSpan.textContent = data.balance;
+                }
+            } catch (err) {
+                console.error("Failed to fetch balance:", err);
+                balanceSpan.textContent = 'Error';
+            }
+        };
+
+        // Load initial balance
+        updateBalance();
+
+        // TRANSFER MONEY LOGIC
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const recipient = document.getElementById('recipient').value;
+            const amount = parseInt(document.getElementById('amount').value);
+            
+            message.textContent = '';
+
+            try {
+                const res = await fetch(`${API_URL}/transfer_money`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        sender: username, 
+                        recipient: recipient, 
+                        amount: amount 
+                    })
+                });
+
+                const result = await res.json();
+                if (result.success) {
+                    message.textContent = `Success! ${result.message}`;
+                    balanceSpan.textContent = result.new_balance;
+                    form.reset();
+                } else {
+                    message.textContent = `Transfer Failed: ${result.message}`;
+                }
+            } catch (err) {
+                message.textContent = 'A network error occurred during the transfer.';
+            }
+        });
+    });
+    </script>
+</body>
+</html>
