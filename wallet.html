@@ -39,7 +39,7 @@
     </section>
 
     <script>
-    const API_URL = 'https://lieselotte-pestersome-wenona.ngrok-free.dev';
+    const API_URL = 'https://lieselotte-pestersome-wenona.ngrok-free.dev'; // REMEMBER TO UPDATE THIS IF YOUR TUNNEL CHANGES!
 
     document.addEventListener('DOMContentLoaded', () => {
         // Apply theme for the body
@@ -65,31 +65,41 @@
             const item = document.createElement('div');
             item.className = `transaction-item ${tx.type}`;
 
-            let senderName;
-            let recipientName;
+            let contextUser;
+            let amountSign;
             
-            // Determine who sent and who received based on the type
+            // Determine the context user and sign based on the type
             if (tx.type === 'sent') {
-                senderName = username;
-                recipientName = tx.recipient;
+                contextUser = tx.recipient;
+                amountSign = '-';
             } else { // received
-                senderName = tx.sender;
-                recipientName = username;
+                contextUser = tx.sender;
+                amountSign = '+';
             }
 
+            // Format the timestamp to be cleaner (e.g., "Oct 3, 2025")
+            // Note: This assumes the 'timestamp' field from main.py is in a standard format.
+            const date = new Date(tx.timestamp);
+            const formattedDate = date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+
+
             item.innerHTML = `
-                <span class="sender">${senderName}</span>
-                <span class="arrow">⟶</span>
-                <span class="amount">♦${tx.amount}</span>
-                <span class="arrow">⟶</span>
-                <span class="recipient">${recipientName}</span>
+                <div class="tx-details">
+                    <span class="tx-amount">${amountSign}♦${tx.amount}</span>
+                    <span class="tx-context">${contextUser}</span>
+                </div>
+                <span class="tx-date">${formattedDate}</span>
             `;
             return item;
         };
 
         // Function to fetch and display the transaction history
         const fetchHistory = async () => {
-            transactionList.innerHTML = '<p id="loadingMsg">Loading transactions...</p>';
+            transactionList.innerHTML = '<p id="loadingMsg" style="text-align: center;">Loading transactions...</p>';
             try {
                 const res = await fetch(`${API_URL}/get_transactions`, {
                     method: 'POST',
@@ -105,11 +115,11 @@
                         transactionList.appendChild(createTransactionItem(tx));
                     });
                 } else {
-                    transactionList.innerHTML = '<p style="text-align: center;">No transactions found.</p>';
+                    transactionList.innerHTML = '<p style="text-align: center; color: #888;">No transactions found.</p>';
                 }
 
             } catch (err) {
-                transactionList.innerHTML = '<p style="text-align: center; color: red;">Failed to load history.</p>';
+                transactionList.innerHTML = '<p style="text-align: center; color: #ff6666;">Failed to load history (Check server/tunnel).</p>';
             }
         };
 
