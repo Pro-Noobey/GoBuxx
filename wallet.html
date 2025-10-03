@@ -32,30 +32,8 @@
     <section class="history-section">
         <h2>Transaction History</h2>
         
-        <div class="transaction-list">
-            <div class="transaction-item sent">
-                <span class="sender">daan</span>
-                <span class="arrow">⟶</span>
-                <span class="amount">♦100</span>
-                <span class="arrow">⟶</span>
-                <span class="recipient">daan's alt</span>
-            </div>
-            
-            <div class="transaction-item received">
-                <span class="sender">someUser</span>
-                <span class="arrow">⟶</span>
-                <span class="amount">♦50</span>
-                <span class="arrow">⟶</span>
-                <span class="recipient">daan</span>
-            </div>
-            
-            <div class="transaction-item sent">
-                <span class="sender">daan</span>
-                <span class="arrow">⟶</span>
-                <span class="amount">♦25</span>
-                <span class="arrow">⟶</span>
-                <span class="recipient">friendUser</span>
-            </div>
+        <div class="transaction-list" id="transactionList">
+            <p id="loadingMsg">Loading transactions...</p>
         </div>
         
     </section>
@@ -80,8 +58,62 @@
         const balanceSpan = document.getElementById('balance');
         const form = document.getElementById('transferForm');
         const message = document.getElementById('message');
+        const transactionList = document.getElementById('transactionList');
 
-        // Function to update the balance
+        // Function to create a beautifully styled transaction item
+        const createTransactionItem = (tx) => {
+            const item = document.createElement('div');
+            item.className = `transaction-item ${tx.type}`;
+
+            let senderName;
+            let recipientName;
+            
+            // Determine who sent and who received based on the type
+            if (tx.type === 'sent') {
+                senderName = username;
+                recipientName = tx.recipient;
+            } else { // received
+                senderName = tx.sender;
+                recipientName = username;
+            }
+
+            item.innerHTML = `
+                <span class="sender">${senderName}</span>
+                <span class="arrow">⟶</span>
+                <span class="amount">♦${tx.amount}</span>
+                <span class="arrow">⟶</span>
+                <span class="recipient">${recipientName}</span>
+            `;
+            return item;
+        };
+
+        // Function to fetch and display the transaction history
+        const fetchHistory = async () => {
+            transactionList.innerHTML = '<p id="loadingMsg">Loading transactions...</p>';
+            try {
+                const res = await fetch(`${API_URL}/get_transactions`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username })
+                });
+                const data = await res.json();
+
+                transactionList.innerHTML = ''; // Clear loading message
+
+                if (data.history && data.history.length > 0) {
+                    data.history.forEach(tx => {
+                        transactionList.appendChild(createTransactionItem(tx));
+                    });
+                } else {
+                    transactionList.innerHTML = '<p style="text-align: center;">No transactions found.</p>';
+                }
+
+            } catch (err) {
+                transactionList.innerHTML = '<p style="text-align: center; color: red;">Failed to load history.</p>';
+            }
+        };
+
+        // Function to update the balance displayed on the page
         const updateBalance = async () => {
             try {
                 const res = await fetch(`${API_URL}/get_account_data`, {
@@ -99,8 +131,9 @@
             }
         };
 
-        // Load initial balance
+        // Load initial data
         updateBalance();
+        fetchHistory();
 
         // TRANSFER MONEY LOGIC
         form.addEventListener('submit', async (e) => {
@@ -127,6 +160,8 @@
                     message.textContent = `Success! ${result.message}`;
                     balanceSpan.textContent = result.new_balance;
                     form.reset();
+                    // CRITICAL: Reload history after a successful transaction!
+                    fetchHistory(); 
                 } else {
                     message.textContent = `Transfer Failed: ${result.message}`;
                 }
