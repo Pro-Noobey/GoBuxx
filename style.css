@@ -1,8 +1,8 @@
 /* ===================================== */
-/* BASE STYLES AND LAYOUT (From previous response) */
+/* BASE STYLES AND THEME VARIABLES */
 /* ===================================== */
 
-/* Body/Background Theme Variables */
+/* Body/Background Theme Variables (DEFAULT: DARK MODE) */
 :root {
     --bg-color: #0f1117;
     --text-color: #e0e0e0;
@@ -57,8 +57,11 @@ body.light-mode .menu-button {
     color: var(--accent-color);
 }
 
+/* ===================================== */
+/* GLOBAL ELEMENTS (Forms, Header) */
+/* ===================================== */
 
-/* General Layout */
+/* Forms (Used in Login, Signin, Send Money, Change Password) */
 .form {
     text-align: center;
     margin: 0 auto;
@@ -117,7 +120,7 @@ body.light-mode .menu-button {
     margin: 10px 0;
     font-size: 2rem;
     color: var(--accent-color);
-    text-shadow: 0 0 5px #4da6ff88; /* Dark mode only effect */
+    text-shadow: 0 0 5px #4da6ff88;
 }
 
 .main-header p {
@@ -125,7 +128,7 @@ body.light-mode .menu-button {
     color: var(--text-color);
 }
 
-/* User Info Top-Left (Dashboard Header) */
+/* User Info/Icon/Menu (Account Page) */
 .user-info {
     position: absolute; 
     top: 20px;
@@ -135,12 +138,23 @@ body.light-mode .menu-button {
     gap: 10px;
 }
 
+/* Account Icon SVG Styling */
+#AccountIcon {
+    width: 40px;
+    height: 40px;
+    color: var(--text-color); 
+    flex-shrink: 0;
+}
+body.light-mode #AccountIcon {
+    color: var(--text-color);
+}
+
 #username {
-    font-size: 3rem; 
+    font-size: 1.5rem; 
     font-weight: 700; 
-    color: #ffffff;
+    color: var(--text-color);
     text-shadow: 0 0 4px #4da6ff88;
-    margin: 20px;
+    margin: 0;
 }
 
 /* Back Link in Settings/Wallet */
@@ -181,6 +195,9 @@ body.light-mode .menu-button {
 #userContextMenu {
     top: 100%; 
     left: 45px;
+    /* Adjust right positioning to ensure it's visible */
+    right: auto;
+    left: 75px; 
 }
 
 .context-menu.visible {
@@ -202,7 +219,10 @@ body.light-mode .menu-button {
     background-color: #4da6ff44;
 }
 
-/* Welcome Section */
+/* ===================================== */
+/* ACCOUNT PAGE / DASHBOARD STYLES */
+/* ===================================== */
+
 .welcome-section {
     text-align: center;
     margin: 30px 0;
@@ -213,18 +233,6 @@ body.light-mode .menu-button {
     color: var(--text-color);
 }
 
-/* Forms Section for new pages */
-.form-section {
-    text-align: center;
-    padding: 20px;
-}
-
-.form-section h2 {
-    color: var(--accent-color);
-    margin-bottom: 20px;
-}
-
-/* Citizens Section */
 .citizens-section {
     padding: 20px;
     max-width: 900px;
@@ -238,14 +246,12 @@ body.light-mode .menu-button {
     text-shadow: 0 0 4px #4da6ff66;
 }
 
-/* Citizen Grid */
 .citizen-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 20px;
 }
 
-/* Citizen Card */
 .citizen-card {
     background-color: var(--card-bg);
     border-radius: 12px;
@@ -269,6 +275,16 @@ body.light-mode .menu-button {
 /* ===================================== */
 /* SETTINGS PAGE SPECIFIC STYLES */
 /* ===================================== */
+.form-section {
+    text-align: center;
+    padding: 20px;
+}
+
+.form-section h2 {
+    color: var(--accent-color);
+    margin-bottom: 20px;
+}
+
 .setting-item {
     display: flex;
     justify-content: space-between;
@@ -290,46 +306,115 @@ body.light-mode .menu-button {
     display: inline-block;
     width: 60px;
     height: 34px;
-}
-
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
+    -webkit-appearance: none; /* Hide default checkbox */
+    appearance: none;
     cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 34px;
 }
 
-.slider:before {
+.switch::before {
+    content: '';
     position: absolute;
-    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: #ccc;
+    border-radius: 34px;
+    transition: background-color 0.4s;
+}
+
+.switch::after {
+    content: '';
+    position: absolute;
     height: 26px;
     width: 26px;
     left: 4px;
     bottom: 4px;
     background-color: white;
-    transition: .4s;
     border-radius: 50%;
+    transition: transform 0.4s;
 }
 
-input:checked + .slider {
+.switch:checked::before {
     background-color: var(--accent-color);
 }
 
-input:focus + .slider {
-    box-shadow: 0 0 1px var(--accent-color);
+.switch:checked::after {
+    transform: translateX(26px);
 }
 
-input:checked + .slider:before {
-    transform: translateX(26px);
+/* ===================================== */
+/* WALLET PAGE SPECIFIC STYLES (REVISED) */
+/* ===================================== */
+
+.history-section {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.history-section h2 {
+    text-align: center; 
+    color: var(--accent-color);
+    margin-bottom: 25px;
+}
+
+.transaction-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+}
+
+.transaction-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-radius: 8px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    font-size: 1rem;
+}
+
+.tx-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-grow: 1;
+}
+
+.tx-amount {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.tx-context {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+/* Style for Sent transactions (money leaving) */
+.transaction-item.sent .tx-amount {
+    color: #ff6666; 
+}
+
+.transaction-item.sent .tx-context::before {
+    content: "Sent to ";
+}
+
+/* Style for Received transactions (money coming in) */
+.transaction-item.received .tx-amount {
+    color: #66ff99; 
+}
+
+.transaction-item.received .tx-context::before {
+    content: "Received from ";
+}
+
+/* Time/Date on the right */
+.tx-date {
+    font-size: 0.8rem;
+    color: #888;
+    text-align: right;
+    white-space: nowrap;
+    margin-left: 15px;
 }
