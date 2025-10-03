@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Go Buxx Settings</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" id="theme-style" href=""> </head>
+<body class="light-mode">
+    <header class="main-header">
+        <div class="user-info">
+            <a href="account.html" class="menu-link">&#x2190; Back</a>
+        </div>
+        <h1>Settings</h1>
+    </header>
+
+    <section class="form-section">
+        <h2>Theme Settings</h2>
+        
+        <div class="setting-item">
+            <label for="themeToggle">Dark Mode / Light Mode</label>
+            <input type="checkbox" id="themeToggle" class="switch">
+        </div>
+        
+    </section>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const username = localStorage.getItem('username');
+        
+        // 1. AUTHENTICATION CHECK (Same as account.html)
+        if (!username || username === "undefined" || username === "null") {
+            console.warn("No username found in localStorage. Redirecting...");
+            window.location.href = 'login.html';
+            return;
+        }
+
+        const body = document.body;
+        const toggle = document.getElementById('themeToggle');
+        
+        // Load preference and apply it immediately
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+
+        // Function to apply the selected theme
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                toggle.checked = true; // Checkbox ON for dark mode
+            } else {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+                toggle.checked = false; // Checkbox OFF for light mode
+            }
+            localStorage.setItem('theme', theme);
+        };
+
+        // Apply theme on load
+        applyTheme(currentTheme);
+
+        // Handle toggle change
+        toggle.addEventListener('change', () => {
+            const newTheme = toggle.checked ? 'dark' : 'light';
+            applyTheme(newTheme);
+        });
+    });
+    </script>
+</body>
+</html>
