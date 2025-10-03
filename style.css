@@ -1,21 +1,112 @@
+/* ===================================== */
+/* BASE STYLES AND LAYOUT (From previous response) */
+/* ===================================== */
+
+/* Body/Background Theme Variables */
+:root {
+    --bg-color: #0f1117;
+    --text-color: #e0e0e0;
+    --card-bg: #1c1f2e;
+    --header-bg: #1a1d2b;
+    --border-color: #2a2f45;
+    --accent-color: #4da6ff;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* -------------------- */
+/* LIGHT MODE THEME */
+/* -------------------- */
+body.light-mode {
+    --bg-color: #f0f2f5;
+    --text-color: #1c1f2e;
+    --card-bg: #ffffff;
+    --header-bg: #ffffff;
+    --border-color: #e0e0e0;
+    --accent-color: #1a73e8;
+}
+
+body.light-mode .main-header h1 {
+    color: var(--accent-color);
+    text-shadow: none;
+}
+body.light-mode .main-header {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-bottom: 1px solid var(--border-color);
+}
+body.light-mode .form {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+body.light-mode .context-menu {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    background-color: #f7f7f7;
+}
+body.light-mode .context-menu button {
+    color: var(--text-color);
+}
+body.light-mode .context-menu button:hover {
+    background-color: #e0e0e0;
+}
+body.light-mode .menu-link,
+body.light-mode .menu-button {
+    color: var(--accent-color);
+}
+
+
+/* General Layout */
 .form {
     text-align: center;
     margin: 0 auto;
     padding: 15px 30px;
     font-size: 18px;
+    background-color: var(--card-bg); 
+    border-radius: 8px;
+    max-width: 400px;
+    margin-top: 50px;
+    box-shadow: 0 4px 12px #00000088;
 }
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #0f1117;
-    color: #e0e0e0;
+
+.form input[type="text"],
+.form input[type="password"],
+.form input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    display: inline-block;
+    border: 1px solid var(--border-color);
+    box-sizing: border-box;
+    border-radius: 4px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.form button[type="submit"] {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+.form button[type="submit"]:hover {
+    background-color: #3b8fe0;
 }
 
 /* Header */
 .main-header {
-    background-color: #1a1d2b;
+    background-color: var(--header-bg);
     padding: 20px;
-    border-bottom: 2px solid #2a2f45;
+    border-bottom: 2px solid var(--border-color);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -25,31 +116,39 @@ body {
 .main-header h1 {
     margin: 10px 0;
     font-size: 2rem;
-    color: #4da6ff;
-    text-shadow: 0 0 5px #4da6ff88;
+    color: var(--accent-color);
+    text-shadow: 0 0 5px #4da6ff88; /* Dark mode only effect */
 }
 
 .main-header p {
     font-size: 1.2rem;
-    color: #ffffffcc;
+    color: var(--text-color);
 }
 
-/* User Info Top-Left - FIXED FOR TOP-LEFT ALIGNMENT */
+/* User Info Top-Left (Dashboard Header) */
 .user-info {
-    position: absolute; /* CHANGED back to absolute */
+    position: absolute; 
     top: 20px;
-    left: 20px; /* CHANGED to align to the very left */
+    left: 20px; 
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
 #username {
-    font-size:3rem;
-    font-weight: 700;
+    font-size: 3rem; 
+    font-weight: 700; 
     color: #ffffff;
     text-shadow: 0 0 4px #4da6ff88;
-    margin: 20px
+    margin: 20px;
+}
+
+/* Back Link in Settings/Wallet */
+.menu-link {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-size: 1.2rem;
+    margin-top: 5px;
 }
 
 .menu-button {
@@ -61,17 +160,17 @@ body {
 }
 
 .menu-button:hover {
-    color: #4da6ff;
+    color: var(--accent-color);
 }
 
-/* Context Menu - Adjusted to align to the right edge of its citizen-card parent */
+/* Context Menu */
 .context-menu {
     display: none;
     position: absolute;
-    top: 45px;
-    right: 10px; /* Aligns to the right edge of its parent (citizen-card) */
+    top: 45px; 
+    right: 5px; 
     left: auto;
-    background-color: #2a2f45;
+    background-color: var(--card-bg);
     border-radius: 6px;
     box-shadow: 0 2px 6px #00000088;
     z-index: 10;
@@ -80,9 +179,8 @@ body {
 
 /* Specific fix for the Header Context Menu */
 #userContextMenu {
-    /* Override for the user menu, which is inside .user-info */
-    top: 100%; /* Position it below the .user-info element */
-    left: 45px; /* ADJUSTED to align under the button more precisely */
+    top: 100%; 
+    left: 45px;
 }
 
 .context-menu.visible {
@@ -93,7 +191,7 @@ body {
     display: block;
     background: none;
     border: none;
-    color: #fff;
+    color: var(--text-color);
     padding: 6px 12px;
     text-align: left;
     width: 100%;
@@ -112,7 +210,18 @@ body {
 
 .welcome-section h2 {
     font-size: 1.8rem;
-    color: #ffffff;
+    color: var(--text-color);
+}
+
+/* Forms Section for new pages */
+.form-section {
+    text-align: center;
+    padding: 20px;
+}
+
+.form-section h2 {
+    color: var(--accent-color);
+    margin-bottom: 20px;
 }
 
 /* Citizens Section */
@@ -125,7 +234,7 @@ body {
 .citizens-section h3 {
     font-size: 1.5rem;
     margin-bottom: 15px;
-    color: #4da6ff;
+    color: var(--accent-color);
     text-shadow: 0 0 4px #4da6ff66;
 }
 
@@ -138,18 +247,17 @@ body {
 
 /* Citizen Card */
 .citizen-card {
-    background-color: #1c1f2e;
+    background-color: var(--card-bg);
     border-radius: 12px;
     padding: 15px;
     position: relative;
-    box-shadow: inset 0 0 0 1px #2a2f45, 0 2px 8px #00000088;
-    transition: transform 0.2s ease;
-    display: flex;
-    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
 }
 
-.citizen-card:hover {
-    transform: translateY(-2px);
+.citizen-name {
+    font-weight: bold;
+    color: var(--accent-color);
 }
 
 .card-header {
@@ -158,10 +266,70 @@ body {
     align-items: center;
 }
 
-.citizen-name {
-    font-size: 1.1rem;
-    margin: 0;
-    color: #ffffff;
+/* ===================================== */
+/* SETTINGS PAGE SPECIFIC STYLES */
+/* ===================================== */
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border-color);
+    max-width: 350px;
+    margin: 0 auto;
 }
 
+.setting-item label {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
 
+/* Toggle Switch Styles (Pure CSS) */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--accent-color);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--accent-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
