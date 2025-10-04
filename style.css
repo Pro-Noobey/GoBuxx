@@ -418,3 +418,71 @@ body.light-mode #AccountIcon {
     white-space: nowrap;
     margin-left: 15px;
 }
+
+/* ===================================== */
+/* INDEX PAGE SPECIFIC STYLES (FINAL) */
+/* ===================================== */
+
+.index-body {
+    /* Ensures the body is a flex container for perfect centering on the Index page only */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.container {
+    /* Stabilize the container width and centering */
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* 💥 FINAL GOBUXX TEXT: Static, Bold, and Glowing */
+.logo {
+    font-size: 5em;
+    font-weight: 900; 
+    letter-spacing: 7px; /* Increased spacing */
+    margin-bottom: 0.2em;
+    margin-top: 0.1em;
+    color: var(--text-color);
+    text-shadow: 0 0 1px var(--accent-color); /* Strong glow effect */
+    transition: text-shadow 0.3s ease; /* Subtle effect for polish */
+}
+
+.cta-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px; 
+    margin-top: 30px;
+}
+
+/* Button style for LOG IN / SIGN IN on Index page */
+.index-btn {
+    padding: 12px 30px;
+    border: 2px solid var(--text-color); 
+    background-color: transparent;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    font-size: 1.1em;
+    min-width: 120px;
+}
+
+.index-btn:hover {
+    background-color: var(--accent-color); /* Buttons glow and fill with accent color on hover */
+    border-color: var(--accent-color);
+    color: white; 
+}
+
+#eco {
+    font-size: 2em;
+    font-family: Arial;
+    font-weight: bolder;
+}
